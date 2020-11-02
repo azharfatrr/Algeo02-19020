@@ -1,0 +1,13 @@
+body{
+    background: white url(search--v2.png) repeat;
+}
+
+#headline{
+    font : normal bold normal 40px/30px Georgia, Sans-serif;
+    text-align: center;
+}
+
+    .container{
+    margin: 10px 25%;
+    background: cyan;
+}
