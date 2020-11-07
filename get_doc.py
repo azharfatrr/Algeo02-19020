@@ -2,6 +2,7 @@ import requests
 import os.path
 from bs4 import BeautifulSoup
 
+# Note : hanya bisa menerima dari kompas, belum disesuaikan lagi
 link_doc = "https://kolom.kompas.com/"
 
 # Make a request to the website
@@ -38,14 +39,14 @@ j = 1
 for doc in document:
     path_cek = "Documents/"
     
-    namefile = "doc" + str(j) +".txt"
-    path_cek += namefile
+    filename = "doc" + str(j) +".txt"
+    path_cek += filename
     
     while (os.path.exists(path_cek)): #Cek nama document sudah ada atau belum
         j += 1
         path_cek = "Documents/"
-        namefile = "doc" + str(j) +".txt"
-        path_cek += namefile
+        filename = "doc" + str(j) +".txt"
+        path_cek += filename
     
     path = path_cek
     file = open(path,'w')
