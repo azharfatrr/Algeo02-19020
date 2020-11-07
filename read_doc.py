@@ -61,7 +61,7 @@ df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
 # print(df)
 
-q = ["krisis"]
+q = ["china"]
 q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
 sim = []
 
@@ -81,7 +81,9 @@ for i in range(n_doc):
             to_add = [cos_sim,i]
             sim.append(to_add)
 
+print(sim)
 sim.sort(reverse=True)  
+print(sim)
 
 for doc in sim:
     if doc[0] > 0.1:
