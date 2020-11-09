@@ -111,7 +111,9 @@ def tf_docs(clean_documents,query,mode):
     query_clean = paragraph_cleaner(query,mode)
     split_word = query_clean.split(' ')
     
-    df.loc[:,'query'] = 0
+    #df.loc[:,'query'] = 0
+    df = df.assign(query=0)
+    
     for word in split_word: # Setiap kata cek
         if not((df.index == word).any()):   # Apakah baris sudah ada?
             df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
