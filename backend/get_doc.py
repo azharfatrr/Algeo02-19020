@@ -3,7 +3,7 @@ import os.path
 from bs4 import BeautifulSoup
 
 # Note : hanya bisa menerima dari kompas, belum disesuaikan lagi
-link_doc = "https://kolom.kompas.com/"
+link_doc = "https://bola.kompas.com/"
 
 # Make a request to the website
 r = requests.get(link_doc)
@@ -37,18 +37,18 @@ for i in link:
 # Simpan dokumen
 j = 1
 for doc in document:
-    path_cek = "Documents/"
+    path = "./test/"
+    number = str('%03d' %j)
+    filename = "doc" + number +".txt"
+    path += filename
     
-    filename = "doc" + str(j) +".txt"
-    path_cek += filename
-    
-    while (os.path.exists(path_cek)): #Cek nama document sudah ada atau belum
+    while (os.path.exists(path)): #Cek nama document sudah ada atau belum
         j += 1
-        path_cek = "Documents/"
-        filename = "doc" + str(j) +".txt"
-        path_cek += filename
+        path = "./test/"
+        number = str('%03d' %j)
+        filename = "doc" + number +".txt"
+        path += filename
     
-    path = path_cek
     file = open(path,'w')
     file.write(doc)
     file.close()

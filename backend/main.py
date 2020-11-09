@@ -1,7 +1,6 @@
 import os.path
 import re
 import string
-import numpy as np
 import pandas as pd
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
@@ -18,21 +17,29 @@ def get_doc(N=15):
     Return list of string
     """
     # KAMUS LOKAL
-    i = 1                                           # Nomor documents
-    path = "./test/" + "doc" + str(i) + ".txt"   # Alamat dan nama file document
-    documents = []    # List ini digunakan untuk menyimpan documents dari database
+    dir = "./test/"
     
+    list_File = os.listdir(dir)
+    allFile = []    # Alamat dan nama file document
+    
+    for file_name in list_File:
+        allFile.append(dir+file_name)   
+        
+    documents = []    # List ini digunakan untuk menyimpan documents dari database
+    i = 0
     # ALGORITMA
-    while(os.path.exists(path) and i<=N):    # Cek apakah file ada, asumsi nama file terurut
+    for path in allFile:
         # Membaca file documents
         file = open(path,'r')       
         doc = file.read()
         # Menambah data documents dari file ke list
         documents.append(doc)
-        # Next instruction
-        i += 1
-        path = "./test/" + "doc" + str(i) + ".txt"
         file.close()
+        # Next instruction
+        if (i<N):
+            i += 1
+        else:
+            break
         
     return documents
 
@@ -54,7 +61,7 @@ def doc_cleaner(documents,mode=0):
     
     return clean_doc
       
-def paragraph_cleaner(paragraph,mode=0):
+def paragraph_cleaner(paragraph,mode=0,clear=True):
     """
     Membersihkan paragraph
     """
@@ -66,14 +73,15 @@ def paragraph_cleaner(paragraph,mode=0):
     clear_paragraph = re.sub(r'[^\x00-\x7F]+', ' ', paragraph)
     # Membersihkan mention
     clear_paragraph = re.sub(r'@\w+', '', clear_paragraph)
-    # Membuat semua huruf lower case
-    clear_paragraph = clear_paragraph.lower()
     # Membersihkan punctuation
-    clear_paragraph = re.sub(r'[%s]' %re.escape(string.punctuation), ' ', clear_paragraph)
-    # Menghilangkan angka
-    clear_paragraph = re.sub(r'[0-9]', '', clear_paragraph)
-    # Membersihkan single alphabet
-    clear_paragraph = re.sub(r'\b[a-zA-Z]\b', '', clear_paragraph)
+    if clear:
+        clear_paragraph = clear_paragraph.lower()
+        # Menghilangkan angka
+        clear_paragraph = re.sub(r'[%s]' %re.escape(string.punctuation), ' ', clear_paragraph)
+        # Membuat semua huruf lower case
+        clear_paragraph = re.sub(r'[0-9]', '', clear_paragraph)
+        # Membersihkan single alphabet
+        clear_paragraph = re.sub(r'\b[a-zA-Z]\b', '', clear_paragraph)
     # Menghilangkan double space
     clear_paragraph = re.sub(r'\s{2,}', ' ', clear_paragraph)
     if (mode!=0):
@@ -85,7 +93,7 @@ def tf_docs(clean_documents,query,mode):
     Mengubah document bersih menjadi dataframe menggunakan pandas dan metode TFIDF \n
     Return dataframe documents
     """
-    df = pd.DataFrame(np.array([]))
+    df = pd.DataFrame([], columns=[0])  # Inisialisasi dataframe
 
     i = 0   # Dokumen pertama
     for doc in clean_documents: # Iterasi tiap document
@@ -182,6 +190,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
     for i in range(len(documents)):
+        documents[i] = paragraph_cleaner(documents[i],0,False)  # Bersihkan sedikit dokuments
         temp = [sim[i],documents[i]]
         sim_doc.append(temp)
     

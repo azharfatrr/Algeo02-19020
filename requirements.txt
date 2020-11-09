@@ -1,5 +1,4 @@
 Flask==1.1.2
 pandas==1.1.4 
-numpy
 Sastrawi
 nltk
