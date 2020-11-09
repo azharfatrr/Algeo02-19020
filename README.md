@@ -30,4 +30,4 @@ cd Algeo02-19020
 $env:FLASK_APP = "server.py"
 flask run
 ```
-3. Cek url di log terminal, terus buka, done, hf
+6. Cek url di log terminal, terus buka, done, hf
