@@ -191,7 +191,6 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     
     # Urutkan berdasarkan cosine similiarity
     sim_doc.sort(reverse=True)
-    print(df)
            
     return sim_doc
 
