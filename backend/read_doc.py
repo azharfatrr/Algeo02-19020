@@ -18,7 +18,7 @@ documents = []
 
 # Format penamaan file "doc<no>.txt"
 i = 1
-path = "Documents/" + "doc" + str(i) + ".txt"
+path = "./test/" + "doc" + str(i) + ".txt"
 
 while(os.path.exists(path)):
     file = open(path,'r')
@@ -26,7 +26,7 @@ while(os.path.exists(path)):
     documents.append(doc)
     file.close()
     i += 1
-    path = "Documents/" + "doc" + str(i) + ".txt"
+    path = "./test/" + "doc" + str(i) + ".txt"
     
 # Documents cleansing
 documents_clean = []
@@ -49,21 +49,26 @@ for d in documents:
 
     # Menambahkan dokumen bersih
     documents_clean.append(document_test)
+
+
   
 # Instantiate a TfidfVectorizer object
 vectorizer = TfidfVectorizer()  
 # It fits the data and transform it as a vector
 X = vectorizer.fit_transform(documents_clean)
 # Convert the X as transposed matrix
+
 X = X.T.toarray()
+# print(X)
 # Create a DataFrame and set the vocabulary as the index
 df = pd.DataFrame(X, index=vectorizer.get_feature_names())
 
-# print(df)
+
 
 q = ["china"]
-q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0],)
+q_vec = vectorizer.transform(q).toarray().reshape(df.shape[0])
 sim = []
+print(q_vec)
 
 # for i in range(20):
 #     sim[i] = np.dot(df.loc[:, i].values, q_vec) / np.linalg.norm(df.loc[:, i]) * np.linalg.norm(q_vec)
