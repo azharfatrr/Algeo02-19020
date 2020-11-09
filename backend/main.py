@@ -157,8 +157,9 @@ def cos_similiarity(df):
       
     return cos_sim
 
-def main(N,mode=0):
+def main(query="master wiwid panutan kita",N=15,mode=0):
     '''
+    query = query document yang paling sesuai \n
     N = banyaknya document \n
     mode = 0 (standart, fast, default), 1 (dilakukan stemming)
     '''
@@ -168,7 +169,7 @@ def main(N,mode=0):
     documents = get_doc(N)
     clean_docs = doc_cleaner(documents,mode)
     
-    df = tf_docs(clean_docs,"pilpres pemilu",mode)
+    df = tf_docs(clean_docs,query,mode)
     sim = cos_similiarity(df)
     
     sim_doc = []
@@ -187,7 +188,9 @@ def main(N,mode=0):
            
     return sim_doc
 
-sim_doc = main(15,0)
+
+query = "pemilu amerika"
+sim_doc = main(query,15,0)
 
 # Buat nampilin aja
 for i in range(len(sim_doc)):
