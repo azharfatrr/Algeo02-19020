@@ -4,10 +4,33 @@ Tubes 2 Algeo
 Link Laporan :
 https://docs.google.com/document/d/14HeyY722pe1jDHskdt7BWtCvsoYdLkpFYQoZiFbJgdg/edit#
 
-Cara run:
-1. Pastiin udh install flask (sama modul2 yg ada di requirements.txt)
-2. Jalanin ini di terminal
+Cara run (windows, terminal = powershell):
+1. Bikin virtual environment
+*tanpa kurung buka dan tutup*
 ```
-env FLASK_APP=server.py flask run
+python3 -m venv [nama project]
 ```
-3. Cek url di terminal, terus buka, done, hf
+2. Masuk ke direktori virtual env tsb lalu clone project ini menggunakan git bash atau lainnya
+``` 
+git clone https://github.com/azharfatrr/Algeo02-19020.git
+```
+3. Masuk ke venv via terminal
+*tanpa kurung buka dan tutup*
+```
+[nama project]\Scripts\activate
+```
+3. Install semua modul yang ada di requirements.txt
+*tanpa kurung buka dan tutup*
+```
+pip install [nama modul]
+```
+4. Setelah semua modul terinstall, arahkan ke folder project
+```
+cd Algeo02-19020
+```
+5. Jalanin ini di terminal
+```
+$env:FLASK_APP = "server.py"
+flask run
+```
+3. Cek url di log terminal, terus buka, done, hf
