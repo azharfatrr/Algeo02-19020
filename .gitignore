@@ -1,8 +1,5 @@
-## testing
-secret.txt
-
-## glitch start-up
-start.sh
-
 ## log
 *.log
+
+## cache
+__pycache__/
