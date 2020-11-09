@@ -18,7 +18,7 @@ documents = []
 i = 1
 path = "./test/" + "doc" + str(i) + ".txt"
 
-while(os.path.exists(path) and i <= 15):
+while(os.path.exists(path) and i <= 20):
     file = open(path,'r')
     doc = file.read()
     documents.append(doc)
@@ -42,7 +42,7 @@ for d in documents:
     # Remove the doubled space
     document_test = re.sub(r'\s{2,}', ' ', document_test)
     # Stemming kata dengan sastrawi
-    document_test = stemmer.stem(document_test)
+    # document_test = stemmer.stem(document_test)
     # print("berhasil")
 
     # Menambahkan dokumen bersih
@@ -63,6 +63,9 @@ print('d' in df.index) # Cek apakah indeks ada
 df.loc['d',:] = int(2) # Menambah indeks
 
 print(df)
+
+copy index
+df2 = pd.DataFrame(index=df.index)
 '''
 
 
@@ -88,4 +91,5 @@ for doc in documents_clean: # Iterasi tiap document
             df.loc[word,i] += 1             # Kalau udah ada tinggal increment
     i += 1 # Indeks dokumen
     
+
 print(df)

@@ -3,21 +3,17 @@ import re
 import string
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 
 # Module Initialization
 factory = StemmerFactory()
 stemmer = factory.create_stemmer()
-vectorizer = TfidfVectorizer() 
 
 # KAMUS FUNGSI DAN PROSEDUR
 
-def get_doc():
+def get_doc(N=15):
     """
-    Fungsi ini digunakan untuk membaca file dari database dan disimpan ke documents \n
+    Fungsi ini digunakan untuk membaca file dari database sebanyak N dan disimpan ke documents \n
     Format penamaan document : doc<i>.txt (i = 1..End) \n
     Return list of string
     """
@@ -27,7 +23,7 @@ def get_doc():
     documents = []    # List ini digunakan untuk menyimpan documents dari database
     
     # ALGORITMA
-    while(os.path.exists(path)):    # Cek apakah file ada, asumsi nama file terurut
+    while(os.path.exists(path) and i<=N):    # Cek apakah file ada, asumsi nama file terurut
         # Membaca file documents
         file = open(path,'r')       
         doc = file.read()
@@ -52,15 +48,13 @@ def doc_cleaner(documents,mode=0):
     
     for doc in documents:
         # Membersihkan tiap documents
-        pass_doc = paragraph_cleaner(doc)
-        if (mode!=0):
-            pass_doc = stemmer.stem(pass_doc)
+        pass_doc = paragraph_cleaner(doc,mode)
         # Menambah documents bersih
         clean_doc.append(pass_doc)
     
     return clean_doc
       
-def paragraph_cleaner(paragraph):
+def paragraph_cleaner(paragraph,mode=0):
     """
     Membersihkan paragraph
     """
@@ -78,39 +72,128 @@ def paragraph_cleaner(paragraph):
     clear_paragraph = re.sub(r'[%s]' %re.escape(string.punctuation), ' ', clear_paragraph)
     # Menghilangkan angka
     clear_paragraph = re.sub(r'[0-9]', '', clear_paragraph)
+    # Membersihkan single alphabet
+    clear_paragraph = re.sub(r'\b[a-zA-Z]\b', '', clear_paragraph)
     # Menghilangkan double space
     clear_paragraph = re.sub(r'\s{2,}', ' ', clear_paragraph)
-    
+    if (mode!=0):
+        clear_paragraph = stemmer.stem(clear_paragraph)
     return clear_paragraph
 
-def tfidf_doc(clean_documents):
+def tf_docs(clean_documents,query,mode):
     """
     Mengubah document bersih menjadi dataframe menggunakan pandas dan metode TFIDF \n
     Return dataframe documents
     """
-    # # Memberikan nilai pada setiap kata dalam dokumen dengan metode TFIDF
-    # temp = vectorizer.fit_transform(clean_documents)
-    # # Mengubah documents menjadi bentuk matriks
-    # temp = temp.T.toarray()
-    # # Membuat dataframe dengan pandas, baris : komponen kata, kolom : dokumen ke-(x-1), elemen adalah nilai TFID kata tersebut dalam dokumen
-    # df = pd.DataFrame(temp, index=vectorizer.get_feature_names())
-    # df = pd.DataFrame([], index='test')
-    # for doc in clean_documents:
+    df = pd.DataFrame(np.array([]))
+
+    i = 0   # Dokumen pertama
+    for doc in clean_documents: # Iterasi tiap document
+        df.loc[:,i] = 0         # Inisialisasi nilai kolom dengan nol
+        split_word = doc.split(' ') # Split menjadi setiap kata
+                    
+        for word in split_word: # Setiap kata cek
+            if not((df.index == word).any()):   # Apakah baris sudah ada?
+                df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
+                df.loc[word,i] = 1              # Lalu baris itu tambah 1
+            else:
+                df.loc[word,i] += 1             # Kalau udah ada tinggal increment
+        i += 1 # Indeks dokumen
         
+    df.sort_index(inplace=True)         # Sort Index
+    if ((df.index == '').any()):
+        df = df.drop([''])              # Drop Index kosong
     
-    # # return df
-
-def tfidf_query(query,df):
     """
-    Mengubah query menjadi vector dataframe, df adalah dataframe acuan
-    Return dataframe query
+    Menambah query menjadi vector dataframe
     """
-    clean_query = paragraph_cleaner(query)
-    clean_query = [clean_query] #Ubah jadi array
-    vector_query = vectorizer.transform(clean_query).toarray(df.shape[0])
     
-    return vector_query
+    query_clean = paragraph_cleaner(query,mode)
+    split_word = query_clean.split(' ')
+    
+    df.loc[:,'query'] = 0
+    for word in split_word: # Setiap kata cek
+        if not((df.index == word).any()):   # Apakah baris sudah ada?
+            df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
+            df.loc[word,'query'] = 1              # Lalu baris itu tambah 1
+        else:
+            df.loc[word,'query'] += 1             # Kalau udah ada tinggal increment
+    return df
 
+def cos_similiarity(df):
+    # cos_sim = []    # Indeks menyatakan urutan dokumen
+    norm_doc = []   # Indeks menyatakan urutan dokumen
+    norm_query = 0  # Inisialisasi
+    dot_doc = []    # Indeks menyatakan urutan dokumen
+    
+    idx = (df['query'] != 0)     # Cari kata yang tidak nol di query
+    df_new = df.loc[idx,:]
+    
+    col_df = df_new.columns
+    row_df = df_new.index
+    
+    # Normal query
+    sum = 0
+    for row in row_df:
+        sum += (df_new.loc[row,'query'])**2
+    norm_query = sum**(1/2)
+    
+    # Normal doc & Dot product
+    for col in col_df:
+        if (col != 'query'):
+            sum_norm = 0
+            sum_dot = 0
+            for row in row_df:
+                sum_norm += (df_new.loc[row,col])**2
+                sum_dot += df_new.loc[row,col]*df_new.loc[row,'query']
+                
+            norm_doc.append(sum_norm**(1/2))
+            dot_doc.append(sum_dot)
+      
+    cos_sim = [0 for i in range(len(col_df)-1)]
+    for i in range(len(col_df)-1):  # Kurangi query
+        if ((norm_doc[i])!=0):
+            cos_sim[i] = dot_doc[i]/(norm_query*norm_doc[i])    
+      
+    return cos_sim
+
+def main(N,mode=0):
+    '''
+    N = banyaknya document \n
+    mode = 0 (standart, fast, default), 1 (dilakukan stemming)
+    '''
+    documents = []
+    clean_docs = []
+    
+    documents = get_doc(N)
+    clean_docs = doc_cleaner(documents,mode)
+    
+    df = tf_docs(clean_docs,"pilpres pemilu",mode)
+    sim = cos_similiarity(df)
+    
+    sim_doc = []
+    for i in range(len(documents)):
+        temp = [sim[i],documents[i]]
+        sim_doc.append(temp)
+    
+    sim_doc.sort(reverse=True)
+    
+    '''  # Buat nampilin aja
+    for i in range(len(sim_doc)):
+        if (sim_doc[i][0]>0):
+            print("Cosine simiarity : ",sim_doc[i][0])
+            print(sim_doc[i][1])
+    '''
+           
+    return sim_doc
+
+sim_doc = main(15,0)
+
+# Buat nampilin aja
+for i in range(len(sim_doc)):
+    if (sim_doc[i][0]>0):
+        print("Cosine simiarity : ",sim_doc[i][0])
+        print(sim_doc[i][1])
 
 
     
