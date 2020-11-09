@@ -4,6 +4,8 @@ import string
 import numpy as np
 import pandas as pd
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize 
 
 # Module Initialization
 factory = StemmerFactory()
@@ -86,11 +88,16 @@ def tf_docs(clean_documents,query,mode):
     Return dataframe documents
     """
     df = pd.DataFrame(np.array([]))
+    ''' INI ADA TAMBAHAN '''
+    stop_words = set(stopwords.words('indonesian'))
 
     i = 0   # Dokumen pertama
     for doc in clean_documents: # Iterasi tiap document
         df.loc[:,i] = 0         # Inisialisasi nilai kolom dengan nol
         split_word = doc.split(' ') # Split menjadi setiap kata
+        
+        ''' INI ADA TAMBAHAN '''
+        split_word = [w for w in split_word if not w in stop_words]
                     
         for word in split_word: # Setiap kata cek
             if not((df.index == word).any()):   # Apakah baris sudah ada?
@@ -110,6 +117,8 @@ def tf_docs(clean_documents,query,mode):
     
     query_clean = paragraph_cleaner(query,mode)
     split_word = query_clean.split(' ')
+    ''' INI ADA TAMBAHAN '''
+    split_word = [w for w in split_word if not w in stop_words]
     
     df.loc[:,'query'] = 0
     for word in split_word: # Setiap kata cek
@@ -126,17 +135,14 @@ def cos_similiarity(df):
     norm_query = 0  # Inisialisasi
     dot_doc = []    # Indeks menyatakan urutan dokumen
     
-    # Pembentukan vector disesuaikan dengan term pada query
-    idx = (df['query'] != 0)     # Cari kata yang tidak nol di query
-    df_new = df.loc[idx,:]
-    
-    col_df = df_new.columns
-    row_df = df_new.index
+    # Pembentukan vector disesuaikan dengan kamus kata
+    col_df = df.columns
+    row_df = df.index
     
     # Normal query
     sum = 0
     for row in row_df:
-        sum += (df_new.loc[row,'query'])**2
+        sum += (df.loc[row,'query'])**2
     norm_query = sum**(1/2)
     
     # Normal doc & Dot product
@@ -145,8 +151,8 @@ def cos_similiarity(df):
             sum_norm = 0
             sum_dot = 0
             for row in row_df:
-                sum_norm += (df_new.loc[row,col])**2
-                sum_dot += df_new.loc[row,col]*df_new.loc[row,'query']
+                sum_norm += (df.loc[row,col])**2
+                sum_dot += df.loc[row,col]*df.loc[row,'query']
                 
             norm_doc.append(sum_norm**(1/2))
             dot_doc.append(sum_dot)
@@ -155,7 +161,7 @@ def cos_similiarity(df):
     for i in range(len(col_df)-1):  # Kurangi query
         if ((norm_doc[i])!=0):
             cos_sim[i] = dot_doc[i]/(norm_query*norm_doc[i])    
-      
+     
     return cos_sim
 
 def main(query="master wiwid panutan kita",N=15,mode=0):
@@ -185,6 +191,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     
     # Urutkan berdasarkan cosine similiarity
     sim_doc.sort(reverse=True)
+    print(df)
            
     return sim_doc
 
