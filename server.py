@@ -1,7 +1,5 @@
 from flask import Flask, request, render_template, jsonify
-import sys
-sys.path.insert(1, 'backend')
-import main, read_doc, test_code
+from backend import main
 
 # init
 app = Flask(__name__, static_folder='frontend/static', template_folder='frontend/views')
