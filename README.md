@@ -6,6 +6,7 @@ https://docs.google.com/document/d/14HeyY722pe1jDHskdt7BWtCvsoYdLkpFYQoZiFbJgdg/
 
 Cara run (windows, terminal = powershell):
 1. Bikin virtual environment
+
 *tanpa kurung buka dan tutup*
 ```
 python3 -m venv [nama project]
@@ -15,11 +16,13 @@ python3 -m venv [nama project]
 git clone https://github.com/azharfatrr/Algeo02-19020.git
 ```
 3. Masuk ke venv via terminal
+
 *tanpa kurung buka dan tutup*
 ```
 [nama project]\Scripts\activate
 ```
 3. Install semua modul yang ada di requirements.txt
+
 *tanpa kurung buka dan tutup*
 ```
 pip install [nama modul]
