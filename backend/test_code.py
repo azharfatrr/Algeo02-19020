@@ -3,6 +3,12 @@ import re
 import string
 import numpy as np
 import pandas as pd
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+
+
+# Module Initialization
+factory = StemmerFactory()
+stemmer = factory.create_stemmer()
 
 # path = "./test/" + "doc" + str(1) + ".txt"
 # print(os.path.exists(path))
@@ -36,7 +42,7 @@ for d in documents:
     # Remove the doubled space
     document_test = re.sub(r'\s{2,}', ' ', document_test)
     # Stemming kata dengan sastrawi
-    # document_test = stemmer.stem(document_test)
+    document_test = stemmer.stem(document_test)
     # print("berhasil")
 
     # Menambahkan dokumen bersih
@@ -59,7 +65,7 @@ df.loc['d',:] = int(2) # Menambah indeks
 print(df)
 '''
 
-df = pd.DataFrame(np.array([]))
+
 
 # df.loc['d',:] = 2 # Menambah indeks
 # # print(df)
@@ -67,14 +73,19 @@ df = pd.DataFrame(np.array([]))
 # df.loc[:,2] = 3 # Menambah kolom ke 1
 # print(df.loc[:,0])
 
-temp = documents_clean[0].split(' ')
-# print(temp)
+df = pd.DataFrame(np.array([]))
 
-for word in temp:
-    if not((df.index == word).any()):
-        df.loc[word,:] = 0
-        df.loc[word,0] = 1
-    else:
-        df.loc[word,0] += 1
+i = 0   # Dokumen pertama
+for doc in documents_clean: # Iterasi tiap document
+    df.loc[:,i] = 0         # Inisialisasi nilai kolom dengan nol
+    split_word = doc.split(' ') # Split menjadi setiap kata
+                 
+    for word in split_word: # Setiap kata cek
+        if not((df.index == word).any()):   # Apakah baris sudah ada?
+            df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
+            df.loc[word,i] = 1              # Lalu baris itu tambah 1
+        else:
+            df.loc[word,i] += 1             # Kalau udah ada tinggal increment
+    i += 1 # Indeks dokumen
     
 print(df)

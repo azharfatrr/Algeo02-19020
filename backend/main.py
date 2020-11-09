@@ -94,11 +94,11 @@ def tfidf_doc(clean_documents):
     # temp = temp.T.toarray()
     # # Membuat dataframe dengan pandas, baris : komponen kata, kolom : dokumen ke-(x-1), elemen adalah nilai TFID kata tersebut dalam dokumen
     # df = pd.DataFrame(temp, index=vectorizer.get_feature_names())
-    df = pd.DataFrame([], index='test')
-    for doc in clean_documents:
+    # df = pd.DataFrame([], index='test')
+    # for doc in clean_documents:
         
     
-    # return df
+    # # return df
 
 def tfidf_query(query,df):
     """
