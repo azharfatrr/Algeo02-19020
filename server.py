@@ -13,5 +13,5 @@ def homepage():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
   """ api search """
-  a = main.main(request.args.get('querysearch'), 15, 0)
+  a = main.main(request.args.get('querysearch'), int(request.args.get('querydoc')), int(request.args.get('querytype')))
   return render_template('table.html', data=a, len=[len(a[0]), len(a[1])])
