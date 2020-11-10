@@ -238,7 +238,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
            
     return sim_doc, list_term
 
-
+'''
 # Testing
 query = "pemilu pilpres amerika"
 sim_doc,list_term = main(query,15,0)
@@ -252,6 +252,7 @@ for i in range(len(sim_doc)):
         print(sim_doc[i][1])    # Nama_File
         print(sim_doc[i][2])    # Dokument
         print()
+'''
 
 
     
