@@ -188,7 +188,7 @@ def dataToList(df,documents):
     # Ubah urutan query pada kolom df simpan di df_new
     col = df_new.columns.tolist()
     col = col[-1:] + col[:-1]
-    df_new = df_new[col]
+    df_new = df_new[col].astype(int)
     
     # Ubah nama kolom
     new_name = ['query']
