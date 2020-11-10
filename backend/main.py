@@ -175,7 +175,7 @@ def cos_similiarity(df):
      
     return cos_sim
 
-def dataToList(df,N,documents):
+def dataToList(df,documents):
     #list_data = []
     
     # Hapus term yang tidak diquery
@@ -189,8 +189,8 @@ def dataToList(df,N,documents):
     
     # Ubah nama kolom
     new_name = ['query']
-    for i in range(N):
-        new_name.append(documents[i][0])
+    for i in range(len(documents)):
+        new_name.append(documents[i][0])    # Pake nama file
     df_new.columns = new_name
     
     # Jadikan list
@@ -216,11 +216,11 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     clean_docs = doc_cleaner(documents,mode)    # Udah disesuaikan
     
     # Buat dataframe dengan pandas dan numpy
-    df = tf_docs(clean_docs,query,mode)
+    df = tf_docs(clean_docs,query,mode)         # NOTE : Urutan dataframe sesuai dengan urutan dokumen
     # Hitung cosine simiarity dari tiap dokumen
     sim = cos_similiarity(df)
     # List term yang diquery
-    list_term = dataToList(df,N,documents)
+    list_term = dataToList(df,documents)
     
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
