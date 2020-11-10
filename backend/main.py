@@ -17,7 +17,7 @@ def get_doc(N=15):
     Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
-    dir = "./test/"
+    dir = "../test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -203,6 +203,26 @@ def dataToList(df,documents):
     
     return list_data
 
+def fsDocs(documents):
+    fsd = []
+    for docs in range(len(documents)):
+        s = documents[docs][1]
+        clear = re.sub(r'[^\x00-\x7F]+', ' ', s)    #hapus dulu unicode biar ganteng, kadang di kalimat pertama udah ada unicodenya
+        idx = clear.find('. ')                      #kalimat pertama diakhiri tanda titik "." dan spasi selanjutnya, kalau cuma titik nanti bisa berhenti di KOMPAS.com
+        temp = clear[0:idx]
+        temp = temp + '.'                           #tambahin titik yang ikutan kehapus
+        fsd.append(temp)
+    return fsd
+
+def sumWord(clean_doc):
+    sumW = []
+    for docs in range(len(clean_doc)):
+        s = clean_doc[docs]
+        temp = len(s.split())
+        sumW.append(temp)
+    return sumW
+
+
 def main(query="master wiwid panutan kita",N=15,mode=0):
     '''
     query = query document yang paling sesuai \n
@@ -217,8 +237,9 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     
     # Dapatkan dokumen dan bersihkan
     documents = get_doc(N)
+    firstSentence = fsDocs(documents)           #simpan kalimat pertama
     clean_docs = doc_cleaner(documents,mode)    # Udah disesuaikan
-    
+    wordSum = sumWord(clean_docs)               #hitung banyak kata tiap dokumen
     # Buat dataframe dengan pandas dan numpy
     df = tf_docs(clean_docs,query,mode)         # NOTE : Urutan dataframe sesuai dengan urutan dokumen
     # Hitung cosine simiarity dari tiap dokumen
@@ -236,23 +257,24 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Urutkan berdasarkan cosine similiarity
     sim_doc.sort(reverse=True)
            
-    return sim_doc, list_term
+    return sim_doc, list_term, firstSentence, wordSum
 
-'''
+
 # Testing
-query = "pemilu pilpres amerika"
-sim_doc,list_term = main(query,15,0)
-
+# query = "pemilu pilpres amerika"
+# sim_doc,list_term = main(query,15,0)
 # Buat nampilin aja
-print(list_term)
+# print(list_term)
+# documents = get_doc()
+# temp = fsDocs(documents)
+# print(temp)
+# for i in range(len(sim_doc)):
+#     if (sim_doc[i][0]>0):
+#         print("Cosine simiarity : ",sim_doc[i][0])
+#         print(sim_doc[i][1])    # Nama_File
+#         print(sim_doc[i][2])    # Dokument
+#         print()
 
-for i in range(len(sim_doc)):
-    if (sim_doc[i][0]>0):
-        print("Cosine simiarity : ",sim_doc[i][0])
-        print(sim_doc[i][1])    # Nama_File
-        print(sim_doc[i][2])    # Dokument
-        print()
-'''
 
 
     
