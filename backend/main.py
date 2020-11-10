@@ -3,6 +3,8 @@ import re
 import string
 import pandas as pd
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize 
 
 # Module Initialization
 factory = StemmerFactory()
@@ -17,30 +19,30 @@ def get_doc(N=15):
     Return list of string
     """
     # KAMUS LOKAL
-    dir = "../test/"
+    dir = "./test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
     
     for file_name in list_File:
         allFile.append(dir+file_name)   
-        
+
     documents = []    # List ini digunakan untuk menyimpan documents dari database
     i = 0
     # ALGORITMA
     for path in allFile:
-        # Membaca file documents
-        file = open(path,encoding = 'latin1')       
-        doc = file.read()
-        # Menambah data documents dari file ke list
-        documents.append(doc)
-        file.close()
-        # Next instruction
         if (i<N):
+            # Membaca file documents
+            file = open(path,encoding='latin1')       
+            doc = file.read()
+            # Menambah data documents dari file ke list
+            documents.append(doc)
+            file.close()
+            # Next instruction
             i += 1
         else:
             break
-        
+    
     return documents
 
 def doc_cleaner(documents,mode=0):
@@ -94,11 +96,18 @@ def tf_docs(clean_documents,query,mode):
     Return dataframe documents
     """
     df = pd.DataFrame([], columns=[0])  # Inisialisasi dataframe
+    
+    ''' INI ADA TAMBAHAN '''
+    stop_words = set(stopwords.words('indonesian'))
+
 
     i = 0   # Dokumen pertama
     for doc in clean_documents: # Iterasi tiap document
         df.loc[:,i] = 0         # Inisialisasi nilai kolom dengan nol
         split_word = doc.split(' ') # Split menjadi setiap kata
+        
+        ''' INI ADA TAMBAHAN '''
+        split_word = [w for w in split_word if not w in stop_words]
                     
         for word in split_word: # Setiap kata cek
             if not((df.index == word).any()):   # Apakah baris sudah ada?
@@ -107,7 +116,9 @@ def tf_docs(clean_documents,query,mode):
             else:
                 df.loc[word,i] += 1             # Kalau udah ada tinggal increment
         i += 1 # Indeks dokumen
-        
+  
+    
+  
     df.sort_index(inplace=True)         # Sort Index
     if ((df.index == '').any()):
         df = df.drop([''])              # Drop Index kosong
@@ -116,12 +127,13 @@ def tf_docs(clean_documents,query,mode):
     Menambah query menjadi vector dataframe
     """
     
+    
     query_clean = paragraph_cleaner(query,mode)
     split_word = query_clean.split(' ')
+    ''' INI ADA TAMBAHAN '''
+    split_word = [w for w in split_word if not w in stop_words]
     
-    #df.loc[:,'query'] = 0
-    df = df.assign(query=0)
-    
+    df.loc[:,'query'] = 0
     for word in split_word: # Setiap kata cek
         if not((df.index == word).any()):   # Apakah baris sudah ada?
             df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
@@ -136,18 +148,14 @@ def cos_similiarity(df):
     norm_query = 0  # Inisialisasi
     dot_doc = []    # Indeks menyatakan urutan dokumen
     
-    # Pembentukan vector disesuaikan dengan term pada query
-    idx = (df['query'] != 0)     # Cari kata yang tidak nol di query
-    df_new = df.loc[idx,:]
+    # Pembentukan vector disesuaikan dengan kamus kata
+    col_df = df.columns
+    row_df = df.index
     
-    col_df = df_new.columns
-    row_df = df_new.index
-    print(df_new)
-    print(df)
     # Normal query
     sum = 0
     for row in row_df:
-        sum += (df_new.loc[row,'query'])**2
+        sum += (df.loc[row,'query'])**2
     norm_query = sum**(1/2)
     
     # Normal doc & Dot product
@@ -156,8 +164,8 @@ def cos_similiarity(df):
             sum_norm = 0
             sum_dot = 0
             for row in row_df:
-                sum_norm += (df_new.loc[row,col])**2
-                sum_dot += df_new.loc[row,col]*df_new.loc[row,'query']
+                sum_norm += (df.loc[row,col])**2
+                sum_dot += df.loc[row,col]*df.loc[row,'query']
                 
             norm_doc.append(sum_norm**(1/2))
             dot_doc.append(sum_dot)
@@ -166,18 +174,44 @@ def cos_similiarity(df):
     for i in range(len(col_df)-1):  # Kurangi query
         if ((norm_doc[i])!=0):
             cos_sim[i] = dot_doc[i]/(norm_query*norm_doc[i])    
-      
+     
     return cos_sim
+
+def dataToList(df):
+    #list_data = []
+    
+    # Hapus term yang tidak diquery
+    idx = (df['query'] != 0)     # Cari kata yang tidak nol di query
+    df_new = df.loc[idx,:]
+    
+    # Ubah urutan query pada kolom df simpan di df_new
+    col = df_new.columns.tolist()
+    col = col[-1:] + col[:-1]
+    df_new = df_new[col]
+    
+    # Ubah nama kolom
+    new_name = ['query']
+    for i in range(1,len(col)):
+        new_name.append(i)
+    df_new.columns = new_name
+    
+    # Jadikan list
+    col_name = [['term']+df_new.columns.tolist()]
+    list_data = col_name + df_new.reset_index().values.tolist()
+    
+    return list_data
 
 def main(query="master wiwid panutan kita",N=15,mode=0):
     '''
     query = query document yang paling sesuai \n
     N = banyaknya document \n
-    mode = 0 (standart, fast, default), 1 (dilakukan stemming)
+    mode = 0 (standart, fast, default), 1 (dilakukan stemming) \n
+    return : list document dan cos_sim, dan list tf dari query
     '''
     # Inisialisasi
     documents = []
     clean_docs = []
+    list_term = []
     
     # Dapatkan dokumen dan bersihkan
     documents = get_doc(N)
@@ -187,6 +221,8 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     df = tf_docs(clean_docs,query,mode)
     # Hitung cosine simiarity dari tiap dokumen
     sim = cos_similiarity(df)
+    # List term yang diquery
+    list_term = dataToList(df)
     
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
@@ -198,17 +234,19 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Urutkan berdasarkan cosine similiarity
     sim_doc.sort(reverse=True)
            
-    return sim_doc
+    return sim_doc, list_term
 
 
-query = "pemilu amerika"
-sim_doc = main(query,15,0)
+# Testing
+query = "pemilu pilpres amerika"
+sim_doc,list_term = main(query,15,0)
 
 # Buat nampilin aja
 for i in range(len(sim_doc)):
     if (sim_doc[i][0]>0):
         print("Cosine simiarity : ",sim_doc[i][0])
         print(sim_doc[i][1])
+        print()
 
 
     
