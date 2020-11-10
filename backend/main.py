@@ -176,6 +176,9 @@ def cos_similiarity(df):
     return cos_sim
 
 def dataToList(df,documents):
+    '''
+    Mengubah dataframe menjadi list
+    '''
     #list_data = []
     
     # Hapus term yang tidak diquery
@@ -190,7 +193,8 @@ def dataToList(df,documents):
     # Ubah nama kolom
     new_name = ['query']
     for i in range(len(documents)):
-        new_name.append(documents[i][0])    # Pake nama file
+        # new_name.append(documents[i][0])    # Pake nama file
+        new_name.append(i+1)    # Pake semi nama file
     df_new.columns = new_name
     
     # Jadikan list
