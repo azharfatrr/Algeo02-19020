@@ -146,7 +146,7 @@
           {% for i in range(len[0]) %}
           <div class="item">
             <div class="header"><a>{{data[0][i][1]}}</a></div>
-            {{data[0][i][2].split(".")[0]}}.
+            {{data[2][i]}}
             <div class="ui accordion">
               <div class="title">
                 <i class="dropdown icon"></i>
@@ -154,8 +154,8 @@
               </div>
               <div class="content">
                 <div class="transition hidden list">
-                  <div>Jumlah Kata: </div>
-                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}}%</div>
+                  <div>Jumlah Kata: {{data[3][i]}}</div>
+                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}} %</div>
                 </div>
               </div>
             </div>
