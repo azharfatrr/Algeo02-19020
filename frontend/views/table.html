@@ -56,7 +56,6 @@
         $("#full-history-table").DataTable({
           scrollY: "400px",
           scrollCollapse: true,
-          ordering: false,
           paging: false
         });
       });
@@ -71,10 +70,27 @@
       </div>
     </div>
     <div class="ui main container">
-      <h1 class="ui header">Dashboard</h1>
-      <p>Tes</p>
+      <h1 class="ui header">Hasil Pencarian</h1>
+      <p>Diurutkan dari tingkat kemiripan tertinggi</p>
+      <div class="ui segment">
+        <div class="ui ordered list">
+          {% for i in range(len[0]) %}
+          <div class="item">
+            <div class="header"><a>{{data[0][i][1]}}</a></div>
+            {{data[0][i][2].split(".")[0]}}.
+            <div class="list">
+              <div>Jumlah Kata: </div>
+              <div>Tingkat Kemiripan: {{data[0][i][0]*100}}%</div>
+            </div>
+          </div>
+          {% endfor%}
+        </div>
+      </div>
     </div>
-
+    <div class="ui main container">
+      <h1 class="ui header">Tabel Term</h1>
+      <p></p>
+    </div>
     <div class="ui tables container">
       <table id="full-history-table" class="ui celled table">
         <thead>
