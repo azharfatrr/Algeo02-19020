@@ -25,5 +25,8 @@ def search():
   if int(request.args.get('querytype')) != 1 and int(request.args.get('querytype')) != 0:
     return redirect("/")
   a = main.main(request.args.get('querysearch'), int(request.args.get('querydoc')), int(request.args.get('querytype')))
-  return render_template('table.html', data=a, len=[len(a[0]), len(a[1]), len(a[1][0])])
+  b = request.args.get('querysearch')
+  c = request.args.get('querydoc')
+  d = request.args.get('querytype')
+  return render_template('table.html', data=a, len=[len(a[0]), len(a[1]), len(a[1][0])], query=b, doc=int(c), type=int(d))
   #return jsonify(a)
