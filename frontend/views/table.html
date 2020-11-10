@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>MasterWiwid Search</title>
+    <title>{{query}} - MasterWiwid Search</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="icon"
@@ -60,6 +60,31 @@
           scrollCollapse: true,
           paging: false
         });
+        $(".ui.form").form({
+          fields: {
+            querysearch: {
+              rules: [
+                {
+                  type: "empty"
+                }
+              ]
+            },
+	    querytype: {
+              rules: [
+                {
+                  type: "empty"
+                }
+              ]
+            },
+	    querydoc: {
+              rules: [
+                {
+                  type: "empty"
+                }
+              ]
+            }
+          }
+        });
       });
     </script>
   </head>
@@ -72,6 +97,48 @@
       </div>
     </div>
     <div class="ui main container">
+      <form class="ui large form" action="" method="get">
+          <div class="field">
+            <div class="ui left icon input">
+              <i class="search icon"></i>
+              <input
+                type="text"
+                name="querysearch"
+                placeholder="Search anything"
+                autocomplete="off"
+                value="{{query}}"
+              />
+            </div>
+          </div>
+          <!--<div class="ui fluid large teal submit button">Login</div>-->
+          <div class="ui accordion">
+            <div class="title">
+              <i class="dropdown icon"></i>
+              Advanced
+            </div>
+            <div class="content">
+              <div class="transition hidden">
+                <div class="field">
+                  <label>Search Type</label>
+                  <select name="querytype">
+                    <option value="0" {% if type==0 %} selected {% endif %} >Fast</option>
+                    <option value="1" {% if type==1 %} selected {% endif %} >Accurate (Slow)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Total Document</label>
+                  <input
+                    type="number"
+                    placeholder="Value"
+                    value="{{doc}}"
+                    name="querydoc"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      <div class="ui divider"></div>
       <h1 class="ui header">Hasil Pencarian</h1>
       <p>Diurutkan dari tingkat kemiripan tertinggi</p>
       <div class="ui segment" style="height:500px;overflow-x:scroll">
@@ -79,7 +146,7 @@
           {% for i in range(len[0]) %}
           <div class="item">
             <div class="header"><a>{{data[0][i][1]}}</a></div>
-            {{data[0][i][2].split(".")[0]}}.
+            {{data[2][i]}}
             <div class="ui accordion">
               <div class="title">
                 <i class="dropdown icon"></i>
@@ -87,8 +154,8 @@
               </div>
               <div class="content">
                 <div class="transition hidden list">
-                  <div>Jumlah Kata: </div>
-                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}}%</div>
+                  <div>Jumlah Kata: {{data[3][i]}}</div>
+                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}} %</div>
                 </div>
               </div>
             </div>
@@ -98,6 +165,7 @@
       </div>
     </div>
     <div class="ui main container">
+      <div class="ui divider"></div>
       <h1 class="ui header">Tabel Term</h1>
       <p></p>
     </div>
