@@ -142,7 +142,8 @@ def cos_similiarity(df):
     
     col_df = df_new.columns
     row_df = df_new.index
-    
+    print(df_new)
+    print(df)
     # Normal query
     sum = 0
     for row in row_df:

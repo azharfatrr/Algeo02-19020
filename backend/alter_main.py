@@ -19,7 +19,7 @@ def get_doc(N=15):
     Return list of string
     """
     # KAMUS LOKAL
-    dir = "./test/"
+    dir = "../test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -32,7 +32,7 @@ def get_doc(N=15):
     # ALGORITMA
     for path in allFile:
         # Membaca file documents
-        file = open(path,'r')       
+        file = open(path,encoding='latin1')       
         doc = file.read()
         # Menambah data documents dari file ke list
         documents.append(doc)
