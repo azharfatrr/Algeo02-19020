@@ -35,7 +35,7 @@ def get_doc(N=15):
             doc = file.read()
             # Menambah data documents dari file ke list
             filename = path.replace("./test/","")
-            temp = [doc,filename]
+            temp = [filename,doc]
             documents.append(temp)
             file.close()
             # Next instruction
@@ -57,7 +57,7 @@ def doc_cleaner(documents,mode=0):
     
     for doc in documents:
         # Membersihkan tiap documents
-        pass_doc = paragraph_cleaner(doc[0],mode)
+        pass_doc = paragraph_cleaner(doc[1],mode)
         # Menambah documents bersih
         clean_doc.append(pass_doc)
     
@@ -126,8 +126,6 @@ def tf_docs(clean_documents,query,mode):
     """
     Menambah query menjadi vector dataframe
     """
-    
-    
     query_clean = paragraph_cleaner(query,mode)
     split_word = query_clean.split(' ')
     ''' INI ADA TAMBAHAN '''
@@ -177,7 +175,7 @@ def cos_similiarity(df):
      
     return cos_sim
 
-def dataToList(df):
+def dataToList(df,N,documents):
     #list_data = []
     
     # Hapus term yang tidak diquery
@@ -191,8 +189,8 @@ def dataToList(df):
     
     # Ubah nama kolom
     new_name = ['query']
-    for i in range(1,len(col)):
-        new_name.append(i)
+    for i in range(N):
+        new_name.append(documents[i][0])
     df_new.columns = new_name
     
     # Jadikan list
@@ -209,26 +207,26 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     return : list document dan cos_sim, dan list tf dari query
     '''
     # Inisialisasi
-    documents = []          #Ini document[i][0] : document, document[i][1] : namafile
+    documents = []          #document[i][0] : nama_file, document[i][1] : document
     clean_docs = []
     list_term = []
     
     # Dapatkan dokumen dan bersihkan
     documents = get_doc(N)
-    clean_docs = doc_cleaner(documents,mode)
+    clean_docs = doc_cleaner(documents,mode)    # Udah disesuaikan
     
     # Buat dataframe dengan pandas dan numpy
     df = tf_docs(clean_docs,query,mode)
     # Hitung cosine simiarity dari tiap dokumen
     sim = cos_similiarity(df)
     # List term yang diquery
-    list_term = dataToList(df)
+    list_term = dataToList(df,N,documents)
     
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
     for i in range(len(documents)):
         documents[i][0] = paragraph_cleaner(documents[i][0],0,False)  # Bersihkan sedikit dokuments
-        temp = [sim[i],documents[i][1],documents[i][0]]
+        temp = [sim[i],documents[i][0],documents[i][1]]
         sim_doc.append(temp)
     
     # Urutkan berdasarkan cosine similiarity
@@ -242,11 +240,13 @@ query = "pemilu pilpres amerika"
 sim_doc,list_term = main(query,15,0)
 
 # Buat nampilin aja
+print(list_term)
+
 for i in range(len(sim_doc)):
-    if (sim_doc[i][0]>=0):
+    if (sim_doc[i][0]>0):
         print("Cosine simiarity : ",sim_doc[i][0])
-        print(sim_doc[i][1])
-        print(sim_doc[i][2])
+        print(sim_doc[i][1])    # Nama_File
+        print(sim_doc[i][2])    # Dokument
         print()
 
 
