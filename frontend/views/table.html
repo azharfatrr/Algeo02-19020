@@ -56,7 +56,7 @@
         $(".ui.accordion").accordion();
         $("#full-history-table").DataTable({
           scrollY: "500px",
-          scrollX: true,
+          scrollX: {% if len[2]>23 %}true{% else %}false{% endif %},
           scrollCollapse: true,
           paging: false
         });
@@ -75,7 +75,7 @@
       <h1 class="ui header">Hasil Pencarian</h1>
       <p>Diurutkan dari tingkat kemiripan tertinggi</p>
       <div class="ui segment" style="height:500px;overflow-x:scroll">
-        <div class="ui ordered list">
+        <div class="ui bulleted divided relaxed list">
           {% for i in range(len[0]) %}
           <div class="item">
             <div class="header"><a>{{data[0][i][1]}}</a></div>
