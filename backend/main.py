@@ -17,7 +17,7 @@ def get_doc(N=15):
     Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
-    dir = "../test/"
+    dir = "./test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
