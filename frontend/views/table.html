@@ -53,8 +53,10 @@
     </style>
     <script type="text/javascript">
       $(document).ready(function() {
+        $(".ui.accordion").accordion();
         $("#full-history-table").DataTable({
-          scrollY: "400px",
+          scrollY: "500px",
+          scrollX: true,
           scrollCollapse: true,
           paging: false
         });
@@ -72,15 +74,23 @@
     <div class="ui main container">
       <h1 class="ui header">Hasil Pencarian</h1>
       <p>Diurutkan dari tingkat kemiripan tertinggi</p>
-      <div class="ui segment">
+      <div class="ui segment" style="height:500px;overflow-x:scroll">
         <div class="ui ordered list">
           {% for i in range(len[0]) %}
           <div class="item">
             <div class="header"><a>{{data[0][i][1]}}</a></div>
             {{data[0][i][2].split(".")[0]}}.
-            <div class="list">
-              <div>Jumlah Kata: </div>
-              <div>Tingkat Kemiripan: {{data[0][i][0]*100}}%</div>
+            <div class="ui accordion">
+              <div class="title">
+                <i class="dropdown icon"></i>
+                Detail
+              </div>
+              <div class="content">
+                <div class="transition hidden list">
+                  <div>Jumlah Kata: </div>
+                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}}%</div>
+                </div>
+              </div>
             </div>
           </div>
           {% endfor%}
