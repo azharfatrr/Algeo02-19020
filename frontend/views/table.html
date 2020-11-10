@@ -56,7 +56,7 @@
         $(".ui.accordion").accordion();
         $("#full-history-table").DataTable({
           scrollY: "500px",
-          scrollX: true,
+          scrollX: {% if len[2]>23 %}true{% else %}false{% endif %},
           scrollCollapse: true,
           paging: false
         });
