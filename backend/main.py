@@ -14,8 +14,7 @@ stemmer = factory.create_stemmer()
 def get_doc(N=15):
     """
     Fungsi ini digunakan untuk membaca file dari database sebanyak N dan disimpan ke documents \n
-    Format penamaan document : doc<i>.txt (i = 1..End) \n
-    Return list of string
+    Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
     dir = "./test/"
@@ -35,7 +34,9 @@ def get_doc(N=15):
             file = open(path,encoding='latin1')       
             doc = file.read()
             # Menambah data documents dari file ke list
-            documents.append(doc)
+            filename = path.replace("./test/","")
+            temp = [doc,filename]
+            documents.append(temp)
             file.close()
             # Next instruction
             i += 1
@@ -56,7 +57,7 @@ def doc_cleaner(documents,mode=0):
     
     for doc in documents:
         # Membersihkan tiap documents
-        pass_doc = paragraph_cleaner(doc,mode)
+        pass_doc = paragraph_cleaner(doc[0],mode)
         # Menambah documents bersih
         clean_doc.append(pass_doc)
     
@@ -208,7 +209,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     return : list document dan cos_sim, dan list tf dari query
     '''
     # Inisialisasi
-    documents = []
+    documents = []          #Ini document[i][0] : document, document[i][1] : namafile
     clean_docs = []
     list_term = []
     
@@ -226,8 +227,8 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
     for i in range(len(documents)):
-        documents[i] = paragraph_cleaner(documents[i],0,False)  # Bersihkan sedikit dokuments
-        temp = [sim[i],documents[i]]
+        documents[i][0] = paragraph_cleaner(documents[i][0],0,False)  # Bersihkan sedikit dokuments
+        temp = [sim[i],documents[i][1],documents[i][0]]
         sim_doc.append(temp)
     
     # Urutkan berdasarkan cosine similiarity
@@ -242,9 +243,10 @@ sim_doc,list_term = main(query,15,0)
 
 # Buat nampilin aja
 for i in range(len(sim_doc)):
-    if (sim_doc[i][0]>0):
+    if (sim_doc[i][0]>=0):
         print("Cosine simiarity : ",sim_doc[i][0])
         print(sim_doc[i][1])
+        print(sim_doc[i][2])
         print()
 
 
