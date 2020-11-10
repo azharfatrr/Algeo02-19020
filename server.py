@@ -20,7 +20,7 @@ def search():
   """ api search """
   if not request.args.get('querydoc') or not request.args.get('querytype') or not request.args.get('querysearch'):
     return redirect("/")
-  if int(request.args.get('querydoc')) < 1:
+  if not(int(request.args.get('querydoc')) > 0 and int(request.args.get('querydoc')) <= 150):
     return redirect("/")
   if int(request.args.get('querytype')) != 1 and int(request.args.get('querytype')) != 0:
     return redirect("/")
