@@ -4,7 +4,6 @@ import string
 import pandas as pd
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
 
 # Module Initialization
 factory = StemmerFactory()
