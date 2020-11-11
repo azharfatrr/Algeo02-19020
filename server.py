@@ -17,7 +17,7 @@ def perihal():
     
 @app.route('/search', methods=['GET'])
 def search():
-  """ api search """
+  """ mencari dokumen berdasarkan query """
   if not request.args.get('querydoc') or not request.args.get('querytype') or not request.args.get('querysearch'):
     return redirect("/")
   if not(int(request.args.get('querydoc')) > 0 and int(request.args.get('querydoc')) <= 150):
@@ -30,3 +30,10 @@ def search():
   d = request.args.get('querytype')
   return render_template('table.html', data=a, len=[len(a[0]), len(a[1]), len(a[1][0])], query=b, doc=int(c), type=int(d))
   #return jsonify(a)
+
+@app.route('/doc/<path:path>')
+def send_txt(path):
+  '''
+  Mengirim dokumen dengan judul path
+  '''
+  return render_template('doc.html', data=main.getSpecDoc(path, -1), judul=path)

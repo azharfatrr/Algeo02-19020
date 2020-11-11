@@ -47,7 +47,7 @@ def get_doc(N=15):
 
 def getSpecDoc(docName,mode):
     ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
-    path = "../test/" + docName + ".txt"
+    path = "./test/" + docName + ".txt"
     file = open(path, encoding="latin1")
     doc = file.read()
     if (mode != -1):
@@ -274,8 +274,8 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
 # Buat nampilin aja
 # print(list_term)
 # documents = get_doc()
-temp = getSpecDoc("doc001", -1)
-print(temp)
+# temp = getSpecDoc("doc001", -1)
+# print(temp)
 # for i in range(len(sim_doc)):
 #     if (sim_doc[i][0]>0):
 #         print("Cosine simiarity : ",sim_doc[i][0])
