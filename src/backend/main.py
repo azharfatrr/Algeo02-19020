@@ -17,7 +17,7 @@ def get_doc(N=15):
     Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
-    dir = "./test/"
+    dir = "../test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -34,7 +34,7 @@ def get_doc(N=15):
             file = open(path,encoding='latin1')       
             doc = file.read()
             # Menambah data documents dari file ke list
-            filename = path.replace("./test/","")
+            filename = path.replace("../test/","")
             temp = [filename,doc]
             documents.append(temp)
             file.close()
@@ -47,12 +47,13 @@ def get_doc(N=15):
 
 def getSpecDoc(docName,mode):
     ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
-    path = "./test/" + docName + ".txt"
+    path = "../test/" + docName + ".txt"
     file = open(path, encoding="latin1")
     doc = file.read()
     if (mode != -1):
         doc = paragraph_cleaner(doc,mode)
     return doc
+    
 def doc_cleaner(documents,mode=0):
     """
     Membersihkan documents dan disimpan pada list clean_doc \n
