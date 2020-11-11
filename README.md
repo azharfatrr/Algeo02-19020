@@ -25,7 +25,11 @@ pip install [nama modul]
 ```
 cd Algeo02-19020
 ```
-5. Jalanin ini di terminal
+5. Arahin ke folder src
+```
+cd src
+```
+6. Jalanin ini di terminal
 ```
 $env:FLASK_APP = "server.py"
 flask run
