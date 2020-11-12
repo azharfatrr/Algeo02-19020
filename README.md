@@ -55,7 +55,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 exit()
 ```
-5. Setelah semua langkah di atas berhasil, arahkan terminal ke direktori proyek ini dengan perintah di bawah ini
+5. Setelah semua langkah di atas berhasil, arahkan terminal ke direktori projek ini dengan perintah di bawah ini
 ```
 cd "Algeo02-19020/src"
 ```
@@ -64,7 +64,7 @@ cd "Algeo02-19020/src"
 $env:FLASK_APP = "server.py"
 flask run
 ```
-7. Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
+7. Jika berhasil, terminal akan menampilkan URL dari projek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
 
 ## Tampilan Depan
 
