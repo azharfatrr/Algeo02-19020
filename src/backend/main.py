@@ -17,8 +17,8 @@ def get_doc(N=15):
     Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
-    dir = "../test/"
-    #dir = "../../test/"
+    #dir = "../test/"        # Untuk Server
+    dir = "../../test/"    # Untuk Testing
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -48,8 +48,8 @@ def get_doc(N=15):
 
 def getSpecDoc(docName,mode):
     ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
-    path = "../test/" + docName + ".txt"
-    #path = "../../test/" + docName + ".txt"
+    #path = "../test/" + docName + ".txt"        # Untuk Server
+    path = "../../test/" + docName + ".txt"    # Untuk Testing
     file = open(path, encoding="latin1")
     doc = file.read()
     if (mode != -1):
@@ -97,7 +97,9 @@ def paragraph_cleaner(paragraph,mode=0,clear=True):
         # Membersihkan single alphabet
         clear_paragraph = re.sub(r'\b[a-zA-Z]\b', '', clear_paragraph)
     # Menghilangkan double space
-    clear_paragraph = re.sub(r'\s{2,}', ' ', clear_paragraph)
+    
+    clear_paragraph = re.sub(r'\s+', ' ', clear_paragraph)
+    
     if (mode!=0):
         # Ini bagian yang tidak efisien dan menyebabkan program lambat
         clear_paragraph = stemmer.stem(clear_paragraph)  
@@ -264,7 +266,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
     for i in range(len(documents)):
-        documents[i][0] = paragraph_cleaner(documents[i][0],0,False)  # Bersihkan sedikit dokuments
+        documents[i][1] = paragraph_cleaner(documents[i][1],0,False)  # Bersihkan sedikit dokuments
         temp = [sim[i],documents[i][0],documents[i][1],firstSentence[i],wordSum[i]]
         sim_doc.append(temp)
     
@@ -275,18 +277,18 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
 
 
 # Testing
-# query = "amerika"
-# sim_doc,list_term = main(query,30,0)
+query = "amerika"
+sim_doc,list_term = main(query,15,0)
 # Buat nampilin aja
 # print(list_term)
 # documents = get_doc()
-# temp = getSpecDoc("doc001", -1)
-# print(temp)
-#for i in range(len(sim_doc)):
-#    if (sim_doc[i][0]>0):
-#        print("Cosine simiarity : ",sim_doc[i][0])
-#        print(sim_doc[i][1])    # Nama_File
-#        print(sim_doc[i][2])    # Dokument
-#        print(sim_doc[i][3])    # First sentence
-#        print(sim_doc[i][4])    # Jumlah kata
-#        print()
+# # temp = getSpecDoc("doc001", -1)
+# # print(temp)
+for i in range(len(sim_doc)):
+   if (sim_doc[i][0]>=0):
+       print("Cosine simiarity : ",sim_doc[i][0])
+       print(sim_doc[i][1])    # Nama_File
+       print(sim_doc[i][2])    # Dokument
+       print(sim_doc[i][3])    # First sentence
+       print(sim_doc[i][4])    # Jumlah kata
+       print()
