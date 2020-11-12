@@ -17,7 +17,7 @@ def get_doc(N=15):
     Return document[0] : document, document[1] : namafile
     """
     # KAMUS LOKAL
-    dir = "../../test/"
+    dir = "../test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -34,7 +34,7 @@ def get_doc(N=15):
             file = open(path,encoding='latin1')       
             doc = file.read()
             # Menambah data documents dari file ke list
-            filename = path.replace("../../test/","")
+            filename = path.replace("../test/","")
             temp = [filename,doc]
             documents.append(temp)
             file.close()
@@ -270,23 +270,18 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
 
 
 # Testing
-query = "amerika"
-sim_doc,list_term = main(query,15,0)
+#query = "amerika"
+#sim_doc,list_term = main(query,15,0)
 # Buat nampilin aja
 # print(list_term)
 # documents = get_doc()
 # temp = getSpecDoc("doc001", -1)
 # print(temp)
-for i in range(len(sim_doc)):
-    if (sim_doc[i][0]>0):
-        print("Cosine simiarity : ",sim_doc[i][0])
-        print(sim_doc[i][1])    # Nama_File
-        print(sim_doc[i][2])    # Dokument
-        print(sim_doc[i][3])    # First sentence
-        print(sim_doc[i][4])    # Jumlah kata
-        print()
-
-
-
-    
-    
+#for i in range(len(sim_doc)):
+#    if (sim_doc[i][0]>0):
+#        print("Cosine simiarity : ",sim_doc[i][0])
+#        print(sim_doc[i][1])    # Nama_File
+#        print(sim_doc[i][2])    # Dokument
+#        print(sim_doc[i][3])    # First sentence
+#        print(sim_doc[i][4])    # Jumlah kata
+#        print()
