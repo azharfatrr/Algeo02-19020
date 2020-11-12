@@ -2,56 +2,60 @@ import requests
 import os.path
 from bs4 import BeautifulSoup
 
-# Note : hanya bisa menerima dari kompas, belum disesuaikan lagi
-link_doc = "https://bola.kompas.com/"
+# Note : Mengambil berita dari kompas.com
+link_doc = "https://news.kompas.com/"
 
-# Make a request to the website
+# Buat request dapatkan halaman pencarian
 r = requests.get(link_doc)
 
-# Create an object to parse the HTML format
-soup = BeautifulSoup(r.content, 'html.parser')
+# Parse hasil menjadi html
+parser = BeautifulSoup(r.content, 'html.parser')
 
 # Retrieve all popular news links (Fig. 1)
-link = []
-for i in soup.find('div', {'class':'most__wrap'}).find_all('a'): #Berkaitan dengan struktur data web
-    link.append(i['href']+'?page=all')                           #Biar pagenya ditampilkan semua
+all_link = []
+for ref in parser.find('div', {'class':'most__wrap'}).find_all('a'): #Berkaitan dengan struktur data web
+    link = ref['href']+'?page=all'
+    if link not in all_link:
+        all_link.append(link)                           #Biar pagenya ditampilkan semua
     
-# For each link, we retrieve paragraphs from it, combine each paragraph as one string, 
-# and save it to documents (Fig. 2)
-
+# # Dari setiap link, kita ambil dokumen di dalamnya
 document = []
-for i in link:
-    #Dapatkan info dalam link
-    r = requests.get(i)
-    
+for link in all_link:
+    # Dapatkan info dalam link
+    r = requests.get(link)
+
     #Parse HTML
-    soup = BeautifulSoup(r.content, 'html.parser')
-    
-    #Dapatkan tiap paragraph
-    sen = []
-    for i in soup.find('div', {'class':'read__content'}).find_all('p'):
-        sen.append(i.text)
-    document.append(' '.join(sen))
+    parser = BeautifulSoup(r.content, 'html.parser')
 
+    #Dapatkan tiap content paragraph
+    content = []
+    i = 0
+    for p in parser.find('div', {'class':'read__content'}).find_all('p'):
+        content.append(p.text)
 
-# Simpan dokumen
-j = 1
+    # Tambahkan ke dalam document
+    document.append(' '.join(content))
+
+# Simpan document
+num = 1
 for doc in document:
-    path = "./test/"
-    number = str('%03d' %j)
+    # Inisialisasi
+    path = "../../test/"
+    number = str('%03d' %num)
     filename = "doc" + number +".txt"
     path += filename
     
     while (os.path.exists(path)): #Cek nama document sudah ada atau belum
-        j += 1
-        path = "./test/"
-        number = str('%03d' %j)
+        num += 1
+        path = "../../test/"
+        number = str('%03d' %num)
         filename = "doc" + number +".txt"
         path += filename
     
+    # Tulis document ke dalam file
     file = open(path,'w')
     file.write(doc)
     file.close()
-    j += 1
+    num += 1
     
 print("Berhasil mengambil data dari " + link_doc)
