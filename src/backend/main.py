@@ -18,6 +18,7 @@ def get_doc(N=15):
     """
     # KAMUS LOKAL
     dir = "../test/"
+    #dir = "../../test/"
     
     list_File = os.listdir(dir)
     allFile = []    # Alamat dan nama file document
@@ -48,6 +49,7 @@ def get_doc(N=15):
 def getSpecDoc(docName,mode):
     ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
     path = "../test/" + docName + ".txt"
+    #path = "../../test/" + docName + ".txt"
     file = open(path, encoding="latin1")
     doc = file.read()
     if (mode != -1):
@@ -84,19 +86,22 @@ def paragraph_cleaner(paragraph,mode=0,clear=True):
     clear_paragraph = re.sub(r'[^\x00-\x7F]+', ' ', paragraph)
     # Membersihkan mention
     clear_paragraph = re.sub(r'@\w+', '', clear_paragraph)
-    # Membersihkan punctuation
+    
     if clear:
-        clear_paragraph = clear_paragraph.lower()
-        # Menghilangkan angka
-        clear_paragraph = re.sub(r'[%s]' %re.escape(string.punctuation), ' ', clear_paragraph)
         # Membuat semua huruf lower case
+        clear_paragraph = clear_paragraph.lower()
+        # Membersihkan punctuation
+        clear_paragraph = re.sub(r'[%s]' %re.escape(string.punctuation), ' ', clear_paragraph)
+        # Menghilangkan angka 
         clear_paragraph = re.sub(r'[0-9]', '', clear_paragraph)
         # Membersihkan single alphabet
         clear_paragraph = re.sub(r'\b[a-zA-Z]\b', '', clear_paragraph)
     # Menghilangkan double space
     clear_paragraph = re.sub(r'\s{2,}', ' ', clear_paragraph)
     if (mode!=0):
-        clear_paragraph = stemmer.stem(clear_paragraph)
+        # Ini bagian yang tidak efisien dan menyebabkan program lambat
+        clear_paragraph = stemmer.stem(clear_paragraph)  
+        
     return clear_paragraph
 
 def tf_docs(clean_documents,query,mode):
@@ -106,31 +111,25 @@ def tf_docs(clean_documents,query,mode):
     """
     df = pd.DataFrame([], columns=[0])  # Inisialisasi dataframe
     
-    ''' INI ADA TAMBAHAN '''
+    # Menghilangkan Stopwords
     stop_words = set(stopwords.words('indonesian'))
-
-
+    
     i = 0   # Dokumen pertama
     for doc in clean_documents: # Iterasi tiap document
         df.loc[:,i] = 0         # Inisialisasi nilai kolom dengan nol
         split_word = doc.split(' ') # Split menjadi setiap kata
         
-        ''' INI ADA TAMBAHAN '''
-        split_word = [w for w in split_word if not w in stop_words]
-                    
+        # Menghilangkan Stopwords
+        split_word = [w for w in split_word if not w in stop_words]         
         for word in split_word: # Setiap kata cek
-            if not((df.index == word).any()):   # Apakah baris sudah ada?
+            # Ini bagian yang tidak efisien dan menyebabkan program lambat
+            if not(word in df.index):   # Apakah baris sudah ada?
                 df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
                 df.loc[word,i] = 1              # Lalu baris itu tambah 1
             else:
                 df.loc[word,i] += 1             # Kalau udah ada tinggal increment
+            
         i += 1 # Indeks dokumen
-  
-    
-  
-    df.sort_index(inplace=True)         # Sort Index
-    if ((df.index == '').any()):
-        df = df.drop([''])              # Drop Index kosong
     
     """
     Menambah query menjadi vector dataframe
@@ -142,11 +141,17 @@ def tf_docs(clean_documents,query,mode):
     
     df.loc[:,'query'] = 0
     for word in split_word: # Setiap kata cek
-        if not((df.index == word).any()):   # Apakah baris sudah ada?
+        if not(word in df.index):   # Apakah baris sudah ada?
             df.loc[word,:] = 0              # Jika belum, maka tambahkan baris baru dan inisialisasi semua dengan nol
             df.loc[word,'query'] = 1              # Lalu baris itu tambah 1
         else:
             df.loc[word,'query'] += 1             # Kalau udah ada tinggal increment
+     
+    # Merapikan data frame        
+    # df.sort_index(inplace=True)         # Sort Index
+    if ((df.index == '').any()):
+        df = df.drop([''])              # Drop Index kosong         
+    
     return df
 
 def cos_similiarity(df):
@@ -270,8 +275,8 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
 
 
 # Testing
-#query = "amerika"
-#sim_doc,list_term = main(query,15,0)
+# query = "amerika"
+# sim_doc,list_term = main(query,30,0)
 # Buat nampilin aja
 # print(list_term)
 # documents = get_doc()
