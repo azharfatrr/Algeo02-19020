@@ -12,7 +12,7 @@ https://docs.google.com/document/d/14HeyY722pe1jDHskdt7BWtCvsoYdLkpFYQoZiFbJgdg/
 ## Struktur Direktori:
 1. **doc** -> lokasi penyimpanan laporan tugas besar.
 2. **src** -> lokasi penyimpanan program.
-3. **test** -> lokasi penyimpanan fail-fail yang berisi dokumen uji (\*.txt).
+3. **test** -> lokasi penyimpanan filefile yang merupakan dokumen uji (\*.txt).
 
 ## Spesifikasi Program:
 1. *Backend* menggunakan *framework* **Flask** dengan bahasa **Python3**.
