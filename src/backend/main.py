@@ -1,3 +1,4 @@
+
 import os.path
 import re
 import string
@@ -47,7 +48,9 @@ def get_doc(N=15):
     return documents
 
 def getSpecDoc(docName,mode):
-    ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
+    ''' fungsi menerima nama dokumen tanpa ekstensi .txt dan mode penghapusannya, \n
+    jika tidak ingin dihapus modenya -1, selain itu akan dihapus sesuai dengan paragraf cleaner  '''
+    
     path = "../test/" + docName + ".txt"        # Untuk Server
     #path = "../../test/" + docName + ".txt"    # Untuk Testing
     file = open(path, encoding="latin1")
@@ -60,8 +63,9 @@ def doc_cleaner(documents,mode=0):
     """
     Membersihkan documents dan disimpan pada list clean_doc \n
     Terdapat 2 mode, 0 : Fast Cleansing, 1 : Accurate Cleansing
-    Return list of string
+    Return documents yang sudah dibersihkan
     """
+    
     # KAMUS LOKAL
     # pass_doc : setiap documents pada list documents
     clean_doc = [] # documents yang sedang dibersihkan
@@ -76,8 +80,9 @@ def doc_cleaner(documents,mode=0):
       
 def text_cleaner(text,mode=0,clear=True):
     """
-    Membersihkan text
+    Membersihkan text dari karakter yang tidak diingikan
     """
+    
     # KAMUS LOKAL
     clear_text = []
     
@@ -163,6 +168,10 @@ def tf_docs(clean_documents,query,mode):
     return df
 
 def cos_similiarity(df):
+    '''
+    Fungsi ini digunakan untuk menghitung cosine similiarity dari dataframe \n 
+    dokumen dan query yang sudah dibersihkan
+    '''
     # cos_sim = []      # Indeks menyatakan urutan dokumen
     norm_doc = []       # Indeks menyatakan urutan dokumen
     norm_query = 0      # Inisialisasi
@@ -201,7 +210,7 @@ def cos_similiarity(df):
      
     return cos_sim
 
-def dataToList(df,documents):
+def dataToList(df):
     '''
     Mengubah dataframe menjadi list
     '''
@@ -218,8 +227,7 @@ def dataToList(df,documents):
     
     # Mengubah nama kolom
     new_name = ['query']
-    for i in range(len(documents)):
-        # new_name.append(documents[i][0])  # Pake nama file
+    for i in range(len(col) - 1):        # Kurangi 1 karena ada query
         new_name.append(i+1)                # Pake urutan nama file
     df_new.columns = new_name
     
@@ -233,10 +241,14 @@ def fsDocs(documents):
     fsd = []
     for docs in range(len(documents)):
         s = documents[docs][1]
-        clear = re.sub(r'[^\x00-\x7F]+', ' ', s)    #hapus dulu unicode biar ganteng, kadang di kalimat pertama udah ada unicodenya
-        idx = clear.find('. ')                      #kalimat pertama diakhiri tanda titik "." dan spasi selanjutnya, kalau cuma titik nanti bisa berhenti di KOMPAS.com
+        # hapus dulu unicode biar ganteng, kadang di kalimat pertama udah ada unicodenya
+        clear = re.sub(r'[^\x00-\x7F]+', ' ', s)  
+        # kalimat pertama diakhiri tanda titik "." dan spasi selanjutnya,
+        # kalau cuma titik nanti bisa berhenti di KOMPAS.com   
+        idx = clear.find('. ')                      
         temp = clear[0:idx]
-        temp = temp + '.'                           #tambahin titik yang ikutan kehapus
+        # tambahin titik yang ikutan kehapus                         
+        temp = temp + '.'                           
         fsd.append(temp)
     return fsd
 
@@ -251,23 +263,24 @@ def sumWord(clean_doc):
 
 def main(query="master wiwid panutan kita",N=15,mode=0):
     '''
+    PROGRAM UTAMA
     query = query document yang paling sesuai \n
     N = banyaknya document \n
     mode = 0 (standart, fast, default), 1 (dilakukan stemming) \n
-    return : list document dan cos_sim, dan list tf dari query
+    return : list document dan cos_sim, dan list term yang di-query
     '''
     # Inisialisasi
-    documents = []          #document[i][0] : nama_file, document[i][1] : text dokumen, document[i][2] : kalimat pertama, document[i][3] : banyak kata
-    clean_docs = []
+    documents = []          #document[i][0] : nama_file, document[i][1] : text dokumen, 
+    clean_docs = []         #document[i][2] : kalimat pertama, document[i][3] : banyak kata
     list_term = []
     
     # Dapatkan dokumen dan bersihkan
     documents = get_doc(N)
-    firstSentence = fsDocs(documents)           #simpan kalimat pertama
-    clean_docs = doc_cleaner(documents,mode)    # Udah disesuaikan
-    wordSum = sumWord(clean_docs)               #hitung banyak kata tiap dokumen
-    # Buat dataframe dengan pandas dan numpy
-    df = tf_docs(clean_docs,query,mode)         # NOTE : Urutan dataframe sesuai dengan urutan dokumen
+    firstSentence = fsDocs(documents)           # simpan kalimat pertama
+    clean_docs = doc_cleaner(documents,mode)    # bersihkan dokumen
+    wordSum = sumWord(clean_docs)               # hitung banyak kata tiap dokumen
+    # Buat dataframe dengan pandas
+    df = tf_docs(clean_docs,query,mode)         # note : Urutan dataframe sesuai dengan urutan dokumen
     # Hitung cosine simiarity dari tiap dokumen
     sim = cos_similiarity(df)
     # List term yang diquery
