@@ -217,7 +217,7 @@ def dataToList(df):
     #list_data = []
     
     # Hapus term yang tidak diquery
-    idx = (df['query'] != 0)   # Cari kata yang tidak nol di kolom query
+    idx = (df['query'] != 0)   # Cari term yang tidak nol pada kolom query
     df_new = df.loc[idx,:]     # Bentuk dataframe baru
     
     # Ubah urutan kolom query pada dataframe lama lalu simpan di dataframe baru
