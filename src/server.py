@@ -21,11 +21,11 @@ def search():
   """
   halaman untuk mendapatkan hasil pencarian berdasarkan tiga paramater
   querysearch = kata kunci pencarian
-  querytype = tipe pencarian (cepat atau akurat (dengan stemming / lambat))
+  querytype = tipe pencarian (cepat atau akurat [lambat, dilakukan stemming])
   querydoc = jumlah dokumen yang akan dicari
   """
   doc = 160 # jumlah dokumen
-  timebefore = int(time())
+  timebefore = int(time()) # waktu (detik) sebelum dimulai pencarian, digunakan untuk menghitung lamanya pencarian
 
   # validasi request
   if not request.args.get('querydoc') or not request.args.get('querytype') or not request.args.get('querysearch'):
