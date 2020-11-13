@@ -140,8 +140,8 @@
         </form>
       <div class="ui divider"></div>
       <h1 class="ui header">Hasil Pencarian</h1>
-      <p>Diurutkan dari tingkat kemiripan tertinggi</p>
-      <p>Dicari dari {{doc}} dokumen ({{sec}} detik)</p>
+      <p>Diurutkan dari tingkat kemiripan tertinggi
+      <br>Dicari dari {{doc}} dokumen ({{sec}} detik)</p>
       <div class="ui segment" style="height:500px;overflow-x:scroll">
         <div class="ui bulleted divided relaxed list">
           {% for i in range(len[0]) %}
@@ -156,7 +156,7 @@
               <div class="content">
                 <div class="transition hidden list">
                   <div>Jumlah Kata: {{data[0][i][4]}}</div>
-                  <div>Tingkat Kemiripan: {{data[0][i][0]*100}} %</div>
+                  <div>Tingkat Kemiripan: {{'%0.2f'|format(data[0][i][0]*100|float)}} %</div>
                 </div>
               </div>
             </div>
