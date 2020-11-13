@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from backend import main
+from time import time
 
 # init
 app = Flask(__name__, static_folder='frontend/static', template_folder='frontend/views')
@@ -24,6 +25,7 @@ def search():
   querydoc = jumlah dokumen yang akan dicari
   """
   doc = 160 # jumlah dokumen
+  timebefore = int(time())
 
   # validasi request
   if not request.args.get('querydoc') or not request.args.get('querytype') or not request.args.get('querysearch'):
@@ -40,7 +42,7 @@ def search():
   c = request.args.get('querydoc')
   d = request.args.get('querytype')
   
-  return render_template('table.html', data=a, len=[len(a[0]), len(a[1]), len(a[1][0])], query=b, doc=int(c), type=int(d))
+  return render_template('table.html', data=a, len=[len(a[0]), len(a[1]), len(a[1][0])], query=b, doc=int(c), type=int(d), sec=int(time())-timebefore)
 
 @app.route('/doc/<path:path>')
 def send_txt(path):
