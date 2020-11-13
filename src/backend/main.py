@@ -284,7 +284,7 @@ def main(query="master wiwid panutan kita",N=15,mode=0):
     # Hitung cosine simiarity dari tiap dokumen
     sim = cos_similiarity(df)
     # List term yang diquery
-    list_term = dataToList(df,documents)
+    list_term = dataToList(df)
     
     # Gabungkan cosine similiarity dan document kedalam satu array
     sim_doc = []
