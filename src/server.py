@@ -55,5 +55,8 @@ def send_txt(path):
     return redirect("/")
 
 @app.errorhandler(404) 
-def invalid_route(e): 
+def invalid_route(e):
+  """
+  mengatasi eror router tidak ditemukan dengan mengarahkan ke halaman utama
+  """
   return redirect("/")
