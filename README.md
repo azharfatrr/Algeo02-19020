@@ -12,7 +12,7 @@ https://docs.google.com/document/d/14HeyY722pe1jDHskdt7BWtCvsoYdLkpFYQoZiFbJgdg/
 ## Struktur Direktori:
 1. **doc** -> lokasi penyimpanan laporan tugas besar.
 2. **src** -> lokasi penyimpanan program.
-3. **test** -> lokasi penyimpanan fail-fail yang berisi dokumen uji (\*.txt).
+3. **test** -> lokasi penyimpanan filefile yang merupakan dokumen uji (\*.txt).
 
 ## Spesifikasi Program:
 1. *Backend* menggunakan *framework* **Flask** dengan bahasa **Python3**.
@@ -36,9 +36,8 @@ git clone https://github.com/azharfatrr/Algeo02-19020.git
 ```
 3. Masuk ke *virtual environment* tersebut via terminal
 ```
-[nama project]\Scripts\activate
+\Scripts\activate
 ```
-Contoh: **tubeshore**\Scripts\activate
 
 3. *Install* semua *library* yang dibutuhkan dengan menjalankan perintah-perintah di bawah ini
 ```
@@ -65,6 +64,10 @@ $env:FLASK_APP = "server.py"
 flask run
 ```
 7. Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
+
+## Tampilan Terminal Ketika Berhasil
+
+![Tampilan Terminal](https://image.prntscr.com/image/WLeqP_fORLCkdAzqgrk0UQ.png)
 
 ## Tampilan Depan
 
