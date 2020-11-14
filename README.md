@@ -66,7 +66,7 @@ flask run
 ```
 7. Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
 
-## Tampilan Terminal Ketika Langkah-Langkah di atas tidak bermasalah
+## Tampilan Terminal Ketika Berhasil
 
 ![Tampilan Terminal](https://image.prntscr.com/image/WLeqP_fORLCkdAzqgrk0UQ.png)
 
