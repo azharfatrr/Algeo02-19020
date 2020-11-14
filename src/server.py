@@ -49,4 +49,5 @@ def send_txt(path):
   '''
   Mengirim dokumen dengan judul path
   '''
+    
   return render_template('doc.html', data=main.getSpecDoc(path, -1), judul=path)
