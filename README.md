@@ -36,9 +36,8 @@ git clone https://github.com/azharfatrr/Algeo02-19020.git
 ```
 3. Masuk ke *virtual environment* tersebut via terminal
 ```
-[nama project]\Scripts\activate
+\Scripts\activate
 ```
-Contoh: **tubeshore**\Scripts\activate
 
 3. *Install* semua *library* yang dibutuhkan dengan menjalankan perintah-perintah di bawah ini
 ```
