@@ -11,7 +11,7 @@ r = requests.get(link_doc)
 # Parse hasil menjadi html
 parser = BeautifulSoup(r.content, 'html.parser')
 
-# Retrieve all popular news links (Fig. 1)
+# Ambil berita berita populer
 all_link = []
 for ref in parser.find('div', {'class':'most__wrap'}).find_all('a'): #Berkaitan dengan struktur data web
     link = ref['href']+'?page=all'
@@ -40,14 +40,14 @@ for link in all_link:
 num = 1
 for doc in document:
     # Inisialisasi
-    path = "../../test/"
+    path = "../../../test/"
     number = str('%03d' %num)
     filename = "doc" + number +".txt"
     path += filename
     
     while (os.path.exists(path)): #Cek nama document sudah ada atau belum
         num += 1
-        path = "../../test/"
+        path = "../../../test/"
         number = str('%03d' %num)
         filename = "doc" + number +".txt"
         path += filename
