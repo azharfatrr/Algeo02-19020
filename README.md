@@ -62,6 +62,9 @@ pip install pandas
 pip install Sastrawi
 pip install nltk
 ```
+
+![Terminal](https://image.prntscr.com/image/3mQFKx5gTuubHBsPrSEGyg.png)
+
 6. Setelah semua *library* ter-*install*, jalankan perintah di bawah ini
 ```
 python3
