@@ -47,8 +47,10 @@ git clone https://github.com/azharfatrr/Algeo02-19020.git
 
 4. Masuk ke *virtual environment* tersebut via terminal
 ```
-Scripts//activate
+Scripts/activate
 ```
+
+![Terminal](https://image.prntscr.com/image/LvA2Ys7wSwmYUG_nNOoP3Q.png)
 
 5. *Install* semua *library* yang dibutuhkan dengan menjalankan perintah-perintah di bawah ini
 ```
