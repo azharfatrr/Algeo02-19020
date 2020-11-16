@@ -59,28 +59,41 @@ pip install pandas
 pip install Sastrawi
 pip install nltk
 ```
-6. Setelah semua *library* ter-*install*, jalankan perintah-perintah di bawah ini
+6. Setelah semua *library* ter-*install*, jalankan perintah di bawah ini
 ```
 python3
-import nltk
-nltk.download('stopwords')
-nltk.download('punkt')
-exit()
 ```
+
+![Terminal](https://image.prntscr.com/image/LvA2Ys7wSwmYUG_nNOoP3Q.png)
+
+Setelah itu, jalankan perintah-perintah di bawah ini **(tanpa 3 karakter dan spasi di depannya)**.
+```
+>>> import nltk
+>>> nltk.download('stopwords')
+>>> nltk.download('punkt')
+>>> exit()
+```
+
+![Terminal](https://image.prntscr.com/image/VERmkR_YS_e4gnWe8e-2fQ.png)
+
 7. Setelah semua langkah di atas berhasil, arahkan terminal ke direktori proyek ini dengan perintah di bawah ini
 ```
 cd "Algeo02-19020/src"
 ```
+
+![Terminal](https://image.prntscr.com/image/fhMgAwLxQAGMbjg5FGqgtQ.png)
+
 8. Jalankan perintah-perintah ini di terminal
 ```
 $env:FLASK_APP = "server.py"
 flask run
 ```
-9. Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
+
+Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut dan buka di browser kesayangan, selamat mencoba!
 
 ## Tampilan Terminal Ketika Berhasil
 
-![Tampilan Terminal](https://image.prntscr.com/image/WLeqP_fORLCkdAzqgrk0UQ.png)
+![Terminal](https://image.prntscr.com/image/VPo9QamSRx2eCrN10dg-rQ.png)
 
 ## Tampilan Depan
 
