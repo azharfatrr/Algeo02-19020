@@ -70,7 +70,7 @@ pip install nltk
 python3
 ```
 
-![Terminal](https://image.prntscr.com/image/LvA2Ys7wSwmYUG_nNOoP3Q.png)
+![Terminal](https://image.prntscr.com/image/pFOS7A6BR0yYjpeC-OgV7w.png)
 
 Setelah itu, jalankan perintah-perintah di bawah ini **(tanpa 3 karakter dan spasi di depannya)**.
 ```
