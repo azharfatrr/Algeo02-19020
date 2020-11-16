@@ -99,7 +99,7 @@ Jika berhasil, terminal akan menampilkan URL dari proyek ini, salin URL tersebut
 
 ## Tampilan Terminal Ketika Berhasil
 
-![Terminal](https://image.prntscr.com/image/uS3RFPbUSrmoP2kRWNb3JQ.png)
+![Terminal](https://image.prntscr.com/image/VPo9QamSRx2eCrN10dg-rQ.png)
 
 ## Tampilan Depan
 
