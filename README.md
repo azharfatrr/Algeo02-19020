@@ -36,6 +36,8 @@ python3 -m venv [nama project]
 ```
 Contoh: python3 -m venv **algeo**
 
+Jika berhasil, di dalam folder tersebut akan ada folder bernama **algeo**.
+
 ![Terminal](https://image.prntscr.com/image/T0qEB9ZmTjahFSiJeDSO0g.png)
 
 3. Masuk ke direktori *virtual environment* tersebut lalu *clone* project ini dengan menggunakan git bash atau lainnya
