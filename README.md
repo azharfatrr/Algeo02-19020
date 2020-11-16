@@ -26,19 +26,24 @@ Pastikan bahwa [Python3](https://www.python.org/download/releases/3.0/) sudah te
 
 1. Buat suatu folder baru, lalu di dalam folder tersebut, tekan **Shift + Klik Kanan**, terdapat pilihan **Open Powershell Window here**, pilih.
 ![Terminal](https://image.prntscr.com/image/IQzjuc0rQlm4ouwlWdv5Ew.png)
-2. Setelah terminal buka, buat *virtual environment* dengan perintah berikut
+![Terminal](https://image.prntscr.com/image/f7qbe7TPQkCyxR2mplRbDQ.png)
+
+2. Setelah terminal terbuka, buat *virtual environment* dengan perintah berikut
 ```
 python3 -m venv [nama project]
 ```
-Contoh: python3 -m venv **tubeshore**
+Contoh: python3 -m venv **algeo**
+![Terminal](https://image.prntscr.com/image/T0qEB9ZmTjahFSiJeDSO0g.png)
 
 3. Masuk ke direktori *virtual environment* tersebut lalu *clone* project ini dengan menggunakan git bash atau lainnya
 ``` 
 git clone https://github.com/azharfatrr/Algeo02-19020.git
 ```
+![Terminal](https://image.prntscr.com/image/N8oGUWazTwiiVgOrF-eBZA.png)
+
 4. Masuk ke *virtual environment* tersebut via terminal
 ```
-\Scripts\activate
+Scriptsactivate
 ```
 
 5. *Install* semua *library* yang dibutuhkan dengan menjalankan perintah-perintah di bawah ini
